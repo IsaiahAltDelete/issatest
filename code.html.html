@@ -1,0 +1,92 @@
+
+                <html>
+                    <head>
+                        <style></style>
+                    </head>
+                    <body>
+                        <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D20 Roller</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r135/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.135.0/examples/js/loaders/GLTFLoader.js"></script>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+    #output {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 24px;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-family: Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <div id="output">Roll the D20!</div>
+  <script>
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Add lighting
+    const light = new THREE.DirectionalLight(0xffffff, 1);
+    light.position.set(5, 5, 5).normalize();
+    scene.add(light);
+
+    // Load the D20 model
+    const loader = new THREE.GLTFLoader();
+    let d20;
+    loader.load('d20.glb', (gltf) => {
+      d20 = gltf.scene;
+      d20.scale.set(1, 1, 1);
+      scene.add(d20);
+    });
+
+    // Set the camera position
+    camera.position.z = 5;
+
+    // Roll logic
+    const rollD20 = () => {
+      if (!d20) return;
+
+      const roll = Math.floor(Math.random() * 20) + 1;
+      const output = document.getElementById('output');
+      output.textContent = `You rolled: ${roll}`;
+
+      // Animate roll
+      const randomRotation = () => Math.random() * Math.PI * 2;
+      d20.rotation.x = randomRotation();
+      d20.rotation.y = randomRotation();
+      d20.rotation.z = randomRotation();
+    };
+
+    // Add click listener
+    window.addEventListener('click', rollD20);
+
+    // Animate the scene
+    const animate = () => {
+      requestAnimationFrame(animate);
+      if (d20) d20.rotation.y += 0.01; // Spin slightly
+      renderer.render(scene, camera);
+    };
+    animate();
+  </script>
+</body>
+</html>
+
+                        <script></script>
+                    </body>
+                </html>
+            
